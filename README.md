@@ -1,15 +1,15 @@
 # Doppelganger
 
-A task scheduler written in Golang.
+A task dispatcher written in Golang.
 
-## Description
+## Introduction
 
-Doppelgager is a task scheduler, which supports following types of task:
+Doppelganger runs tasks in sepcified frequence, and can retry on failed.
 
-* Run a command.
-* Request an HTTP/HTTPS URL.
+Task should be one of following types:
 
-The work should be done in the command or the URL.
+* Command
+* HTTP
 
 ## Usage
 

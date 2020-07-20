@@ -1,14 +1,17 @@
 package engine
 
-import "sync"
+import (
+	"sync"
+)
 
 type Engine struct {
 	// wg for waiting all task workers done
-	wg     *sync.WaitGroup
-	queues map[string]*Queue
+	wg *sync.WaitGroup
+	// Task queue
+	queues map[string]*queue
 }
 
-func (e *Engine) Submit(queue string, task TaskSpec) {
+func (e *Engine) Submit(queue string, task Task) {
 	if q, ok := e.queues[queue]; ok {
 		q.Submit(task)
 	} else {
