@@ -7,6 +7,5 @@ type Callback interface {
 }
 
 type Task interface {
-	Callback(cb Callback)
 	Run(ctx context.Context) error
 }
