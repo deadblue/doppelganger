@@ -14,6 +14,16 @@ type Engine struct {
 	qm *sync.Mutex
 	// Task queue executors.
 	qes map[string]*_QueueExecutor
+
+	// Close event channel
+	done chan struct{}
+}
+
+func (e *Engine) startUp() {
+	e.wg.Add(1)
+	e.wg.Wait()
+	e.done <- struct{}{}
+	close(e.done)
 }
 
 func (e *Engine) Queue(name string, opts *QueueOpts) {
@@ -39,17 +49,19 @@ func (e *Engine) Shutdown() {
 		log.Printf("Shutting down queue [%s]", n)
 		qe.Shutdown()
 	}
+	e.Done()
 }
 
-func (e *Engine) Wait() {
-	e.wg.Wait()
+func (e *Engine) Done() <-chan struct{} {
+	return e.done
 }
 
-func New() *Engine {
-	return &Engine{
-		//
-		wg: &sync.WaitGroup{},
-		//
-		qes: make(map[string]*_QueueExecutor),
+func New() (engine *Engine) {
+	engine = &Engine{
+		wg:   &sync.WaitGroup{},
+		qes:  make(map[string]*_QueueExecutor),
+		done: make(chan struct{}),
 	}
+	go engine.startUp()
+	return
 }
