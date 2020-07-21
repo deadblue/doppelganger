@@ -57,28 +57,29 @@ type TaskJson struct {
 
 func (j *TaskJson) Parse() (t engine.Task, err error) {
 	// Parse task
+	ct := task.CallbackTask(nil)
 	if j.Type.IsCommand() {
 		config := &TaskCommandJson{}
 		if err = json.Unmarshal(j.Config, config); err != nil {
 			return
 		}
-		ct := task.Command(config.Name, config.Args)
+		cmdTask := task.Command(config.Name, config.Args)
 		if config.Input != nil {
-			ct.Input(config.Input)
+			cmdTask.Input(config.Input)
 		}
-		t = ct
+		ct = cmdTask
 	} else if j.Type.IsHttp() {
 		config := &TaskHttpJson{}
 		if err = json.Unmarshal(j.Config, config); err != nil {
 			return
 		}
-		ht := task.Http(config.Url, config.Method, config.Body)
+		httpTask := task.Http(config.Url, config.Method, config.Body)
 		if config.Headers != nil {
 			for name, value := range config.Headers {
-				ht.Header(name, value)
+				httpTask.Header(name, value)
 			}
 		}
-		t = ht
+		ct = httpTask
 	} else {
 		err = errUnknownTaskType
 		return
@@ -88,7 +89,7 @@ func (j *TaskJson) Parse() (t engine.Task, err error) {
 		if cb.Type.IsCommand() {
 			config := &CallbackCommandJson{}
 			if err = json.Unmarshal(cb.Config, config); err == nil {
-				t.Callback(callback.Command(config.Name, config.Args))
+				ct.Callback(callback.Command(config.Name, config.Args))
 			}
 		} else if cb.Type.IsHttp() {
 			config := &CallbackHttpJson{}
@@ -99,7 +100,7 @@ func (j *TaskJson) Parse() (t engine.Task, err error) {
 						hc.Header(name, value)
 					}
 				}
-				t.Callback(hc)
+				ct.Callback(hc)
 			}
 		} else {
 			err = errUnknownCallbackType
@@ -109,5 +110,6 @@ func (j *TaskJson) Parse() (t engine.Task, err error) {
 			return
 		}
 	}
+	t = ct
 	return
 }
