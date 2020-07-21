@@ -19,6 +19,7 @@ func (c *HttpCallback) Send(result []byte) {
 		log.Printf("Create callback request failed: %s", err)
 		return
 	}
+	req.Header.Set("User-Agent", "Doppelganger/1.0")
 	if c.headers != nil {
 		for name, value := range c.headers {
 			req.Header.Set(name, value)

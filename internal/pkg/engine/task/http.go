@@ -34,6 +34,13 @@ func (t *HttpTask) Run(ctx context.Context) (err error) {
 	if err != nil {
 		return
 	}
+	// Set headers
+	req.Header.Set("User-Agent", "Doppelganger/1.0")
+	if t.headers != nil {
+		for name, value := range t.headers {
+			req.Header.Set(name, value)
+		}
+	}
 	// Send request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
