@@ -1,0 +1,15 @@
+default_queue:
+  core_size: 1
+
+queues:
+  -
+    name: test
+    core_size: 10
+
+server:
+  http:
+    type: tcp
+    addr: 127.0.0.1:9527
+  raw:
+    type: unix
+    addr: /tmp/doppelganger-raw.sock

@@ -1,8 +1,0 @@
-default_queue:
-  size: 1
-
-queues:
-  -
-    name: test
-    size: 10
-
