@@ -2,9 +2,12 @@ default_queue:
   core_size: 1
 
 queues:
-  -
-    name: test
-    core_size: 10
+  - name: foo
+    config:
+      core_size: 4
+  - name: bar
+    config:
+      core_size: 8
 
 server:
   http:
