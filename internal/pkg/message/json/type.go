@@ -1,4 +1,4 @@
-package protocol
+package json
 
 type TaskType string
 
