@@ -57,6 +57,7 @@ func (e *Engine) Done() <-chan struct{} {
 }
 
 func New() (engine *Engine) {
+	checkUser()
 	engine = &Engine{
 		wg:   &sync.WaitGroup{},
 		qes:  make(map[string]*_QueueExecutor),
