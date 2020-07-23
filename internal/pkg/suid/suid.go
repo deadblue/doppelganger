@@ -3,7 +3,6 @@ package suid
 
 import (
 	"hash/crc32"
-	"math/big"
 	"net"
 	"os"
 	"strings"
@@ -31,9 +30,8 @@ type SUID [15]byte
 func (id SUID) String() string {
 	sb := new(strings.Builder)
 	for i := 0; i < 3; i++ {
-		n := big.NewInt(0).
-			SetBytes(id[i*5 : (i+1)*5]).
-			Uint64()
+		n := uint64(id[i*5])<<32 | uint64(id[i*5+1])<<24 |
+			uint64(id[i*5+2])<<16 | uint64(id[i*5+3])<<8 | uint64(id[i*5+4])
 		for j := 0; j < 8; j++ {
 			index := (n >> ((7 - j) * 5)) & 0x1f
 			sb.WriteByte(charBase32[index])
