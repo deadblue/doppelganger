@@ -7,14 +7,11 @@ import (
 )
 
 type Server struct {
-	// Core engine
-	e *engine.Engine
-	// Http server
+	// http server
 	hs *http.Server
-
-	// Close flag
+	// close flag
 	closed int32
-	// Error channel
+	// error channel
 	errCh chan error
 }
 
@@ -28,12 +25,12 @@ func (s *Server) Error() <-chan error {
 
 func New(e *engine.Engine, l net.Listener) *Server {
 	s := &Server{
-		e:      e,
-		hs:     &http.Server{},
+		hs: &http.Server{
+			Handler: &handler{e: e},
+		},
 		closed: 0,
 		errCh:  make(chan error),
 	}
-	s.hs.Handler = s
 	go s.startup(l)
 	return s
 }

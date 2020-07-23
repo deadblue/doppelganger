@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/deadblue/doppelganger/internal/pkg/engine"
 	"log"
 	"net/http"
 )
@@ -12,7 +13,11 @@ const (
 	ctProtobuf = "application/protobuf"
 )
 
-func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+type handler struct {
+	e *engine.Engine
+}
+
+func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// TODO: handle http request.
 	log.Printf("Request uri => %s", r.URL.RequestURI())
 	w.Header().Set("X-Powered-By", "Doppelganger")
