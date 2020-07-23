@@ -19,11 +19,28 @@ var (
 	machineId []byte
 	processId []byte
 
-	locker = &sync.Mutex{}
+	// For generate seq
+	mu = &sync.Mutex{}
 
-	currPrefix = ""
-	currSeq    = 0
+	currTs  = int64(0)
+	currSeq = 0
 )
+
+type SUID [15]byte
+
+func (id SUID) String() string {
+	sb := new(strings.Builder)
+	for i := 0; i < 3; i++ {
+		n := big.NewInt(0).
+			SetBytes(id[i*5 : (i+1)*5]).
+			Uint64()
+		for j := 0; j < 8; j++ {
+			index := (n >> ((7 - j) * 5)) & 0x1f
+			sb.WriteByte(charBase32[index])
+		}
+	}
+	return sb.String()
+}
 
 func init() {
 	// Machine ID
@@ -41,52 +58,33 @@ func init() {
 	}
 }
 
-func getSequence(prefix string) int {
-	locker.Lock()
-	defer locker.Unlock()
+func getSequence(ts int64) int {
+	mu.Lock()
+	defer mu.Unlock()
 
-	if prefix == currPrefix {
+	if ts == currTs {
 		currSeq += 1
 	} else {
-		currPrefix = prefix
-		currSeq = 0
+		currTs, currSeq = ts, 0
 	}
 	return currSeq
 }
 
-func encode(buf []byte) string {
-	sb := new(strings.Builder)
-	for i := 0; i < 3; i++ {
-		n := big.NewInt(0).
-			SetBytes(buf[i*5 : (i+1)*5]).
-			Uint64()
-		for j := 0; j < 8; j++ {
-			index := (n >> ((7 - j) * 5)) & 0x1f
-			sb.WriteByte(charBase32[index])
-		}
-	}
-	return sb.String()
-}
-
-func NextRaw() []byte {
+func Next() SUID {
+	// ID prefix
+	id := SUID{}
 	// timestamp in milliseconds
 	now := time.Now().UnixNano() / 1000000
 	timestamp := []byte{
 		byte(now >> 40), byte(now >> 32), byte(now >> 24),
 		byte(now >> 16), byte(now >> 8), byte(now),
 	}
-	// ID prefix
-	buf := make([]byte, 15)
-	copy(buf, timestamp)
-	copy(buf[6:], machineId)
-	copy(buf[10:], processId)
+	copy(id[0:], timestamp)
+	copy(id[6:], machineId)
+	copy(id[10:], processId)
 	// get sequence
-	index := getSequence(string(buf))
-	buf[13], buf[14] = byte(index>>8), byte(index)
+	seq := getSequence(now)
+	id[13], id[14] = byte(seq>>8), byte(seq)
 
-	return buf
-}
-
-func Next() string {
-	return encode(NextRaw())
+	return id
 }
