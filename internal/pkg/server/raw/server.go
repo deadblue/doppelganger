@@ -2,47 +2,45 @@ package raw
 
 import (
 	"github.com/deadblue/doppelganger/internal/pkg/engine"
-	"github.com/deadblue/gostream/quietly"
-	"log"
 	"net"
+	"sync/atomic"
 )
+
+type clientConn struct {
+	net.Conn
+	active bool
+}
 
 type Server struct {
 	// core engine
 	e *engine.Engine
 	// network listener
 	l net.Listener
-	// connect manager
-	cm map[string]net.Conn
+	// connections holder
+	conns map[*clientConn]struct{}
+	// closed flag
+	closed int32
 	// shutdown channel
-	done chan struct{}
+	doneCh chan struct{}
 }
 
-func (s *Server) Start() {
-	log.Printf("Raw server listening at: %s", s.l.Addr())
-	go s.accept()
-}
-
-func (s *Server) Shutdown() (err error) {
-	// Close the listener
-	err = s.l.Close()
-	// Force close all connections
-	for id, conn := range s.cm {
-		log.Printf("Closing connection #%s", id)
-		quietly.Close(conn)
+func (s *Server) Shutdown() {
+	if atomic.CompareAndSwapInt32(&s.closed, 0, 1) {
+		go s.shutdown()
 	}
-	close(s.done)
-	return
 }
 
 func (s *Server) Done() <-chan struct{} {
-	return s.done
+	return s.doneCh
 }
 
-func New(eng *engine.Engine) *Server {
-	return &Server{
-		e: eng,
-
-		done: make(chan struct{}),
+func New(e *engine.Engine, l net.Listener) *Server {
+	s := &Server{
+		e:      e,
+		l:      l,
+		conns:  make(map[*clientConn]struct{}),
+		doneCh: make(chan struct{}),
 	}
+	go s.startup()
+	return s
 }
