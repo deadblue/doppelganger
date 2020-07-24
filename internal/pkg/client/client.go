@@ -8,6 +8,10 @@ type Client struct {
 	conn net.Conn
 }
 
+func (c *Client) Close() error {
+	return c.conn.Close()
+}
+
 func New(network, address string) (c *Client, err error) {
 	conn, err := net.Dial(network, address)
 	if err != nil {
