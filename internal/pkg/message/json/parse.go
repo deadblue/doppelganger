@@ -7,7 +7,7 @@ import (
 	"github.com/deadblue/doppelganger/internal/pkg/engine/task"
 )
 
-func (r *TaskRequest) Parse() (t engine.Task, err error) {
+func (r *TaskParams) Parse() (t engine.Task, err error) {
 	// Parse task
 	ct := task.CallbackTask(nil)
 	if r.Type.IsCommand() {

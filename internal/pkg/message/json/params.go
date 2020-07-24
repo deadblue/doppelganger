@@ -39,7 +39,7 @@ type HttpTask struct {
 	Body string `json:"body"`
 }
 
-type TaskRequest struct {
+type TaskParams struct {
 	// Target queue name
 	Queue string `json:"queue"`
 	// Task type: command/http
@@ -50,9 +50,4 @@ type TaskRequest struct {
 	RetryTimes int `json:"retry_times"`
 	// Callback config.
 	Callback *Callback `json:"callback"`
-}
-
-type Request struct {
-	Method  string          `json:"method"`
-	Request json.RawMessage `json:"request"`
 }
