@@ -48,6 +48,7 @@ message TaskRequest {
 }
 
 message Request {
-  string method = 1;
-  bytes request = 2;
+  string id = 1;
+  string method = 2;
+  bytes request = 3;
 }
