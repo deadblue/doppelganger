@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+// Generic request
+message Request {
+  string id = 1;
+  string method = 2;
+  bytes params = 3;
+}
+
+// Generic response
+message Response {
+  string id = 1;
+  int32 error = 2;
+  string message = 3;
+  bytes result = 4;
+}

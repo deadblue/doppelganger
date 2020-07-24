@@ -40,15 +40,9 @@ message HttpTask {
   bytes body = 4;
 }
 
-message TaskRequest {
+message AddTaskParams {
   string queue = 1;
   TaskType type = 2;
   bytes config = 3;
   Callback callback = 4;
-}
-
-message Request {
-  string id = 1;
-  string method = 2;
-  bytes request = 3;
 }
