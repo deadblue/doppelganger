@@ -2,7 +2,9 @@ package raw
 
 import (
 	"github.com/deadblue/doppelganger/internal/pkg/message/pb"
+	"github.com/deadblue/doppelganger/internal/pkg/protocol"
 	"github.com/deadblue/gostream/quietly"
+	"google.golang.org/protobuf/proto"
 	"io"
 	"log"
 	"net"
@@ -34,16 +36,28 @@ func (s *Server) serve(conn net.Conn) {
 	// Read message one by one
 	for atomic.LoadInt32(&s.closing) != 1 {
 		req := &pb.Request{}
-		if err := ReadMessage(conn, req); err != nil {
+		if err := protocol.ReadMessage(conn, req); err != nil {
 			if err != io.EOF {
 				log.Printf("Read incoming message error: %s", err)
 			}
 			break
 		}
 		// Handle request
-		// TODO: start a new goroutine for each request?
-		s.handle(req)
-		// TODO: write result to the wire
+		resp := pb.Response{
+			Id: req.Id, Error: 0,
+		}
+		if result, err := s.handle(req); err != nil {
+			resp.Error = 1
+			resp.Message = err.Error()
+		} else {
+			if result != nil {
+				resp.Result, _ = proto.Marshal(result)
+			}
+		}
+		if err := protocol.WriteMessage(conn, &resp); err != nil {
+			log.Printf("Write outgoing message error: %s", err)
+			break
+		}
 	}
 }
 
