@@ -2,31 +2,31 @@ package raw
 
 import (
 	"github.com/deadblue/doppelganger/internal/pkg/engine"
+	"log"
 	"net"
+	"sync"
 	"sync/atomic"
 )
-
-type clientConn struct {
-	net.Conn
-	active bool
-}
 
 type Server struct {
 	// core engine
 	e *engine.Engine
 	// network listener
 	l net.Listener
-	// connections holder
-	conns map[*clientConn]struct{}
-	// closed flag
-	closed int32
-	// shutdown channel
+
+	// closing flag
+	closing int32
+	// wait group for all connections closed
+	wg sync.WaitGroup
+	// channel to notify server has completely shutdown.
 	doneCh chan struct{}
 }
 
 func (s *Server) Shutdown() {
-	if atomic.CompareAndSwapInt32(&s.closed, 0, 1) {
+	if atomic.CompareAndSwapInt32(&s.closing, 0, 1) {
 		go s.shutdown()
+	} else {
+		log.Println("Server is being / has been shutdown!")
 	}
 }
 
@@ -36,9 +36,15 @@ func (s *Server) Done() <-chan struct{} {
 
 func New(e *engine.Engine, l net.Listener) *Server {
 	s := &Server{
-		e:      e,
-		l:      l,
-		conns:  make(map[*clientConn]struct{}),
+		// engine
+		e: e,
+		// network listener
+		l: l,
+		// closing flag
+		closing: 0,
+		// wait for all active connections exit.
+		wg: sync.WaitGroup{},
+		// notification channel
 		doneCh: make(chan struct{}),
 	}
 	go s.startup()
