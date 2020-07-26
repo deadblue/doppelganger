@@ -49,7 +49,7 @@ func (e *Engine) Shutdown() {
 		log.Printf("Shutting down queue [%s]", n)
 		qe.Shutdown()
 	}
-	e.Done()
+	e.wg.Done()
 }
 
 func (e *Engine) Done() <-chan struct{} {
