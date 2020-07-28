@@ -16,9 +16,11 @@ func (c *Client) AddCommandTask(queue string, cmdName string, cmdArgs ...string)
 		return
 	}
 	return c.call(message.MethodAddTask, &pb.AddTaskParams{
-		Queue:  queue,
-		Type:   pb.TaskType_COMMAND_TASK,
-		Config: config,
+		Queue: queue,
+		Task: &pb.Task{
+			Type:   pb.TaskType_TASK_COMMAND,
+			Config: config,
+		},
 	})
 }
 
@@ -31,8 +33,10 @@ func (c *Client) AddHttpTask(queue string, url string) (err error) {
 		return
 	}
 	return c.call(message.MethodAddTask, &pb.AddTaskParams{
-		Queue:  queue,
-		Type:   pb.TaskType_HTTP_TASK,
-		Config: config,
+		Queue: queue,
+		Task: &pb.Task{
+			Type:   pb.TaskType_TASK_HTTP,
+			Config: config,
+		},
 	})
 }

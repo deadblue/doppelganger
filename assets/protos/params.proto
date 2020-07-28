@@ -2,47 +2,11 @@ syntax = "proto3";
 
 option go_package = ".;pb";
 
-enum CallbackType {
-  COMMAND_CB = 0;
-  HTTP_CB = 1;
-}
-
-message CommandCallback {
-  string name = 1;
-  repeated string args = 2;
-}
-
-message HttpCallback {
-  string url = 1;
-  map<string, string> headers = 2;
-}
-
-message Callback {
-  CallbackType type = 1;
-  bytes config = 2;
-}
-
-enum TaskType {
-  COMMAND_TASK = 0;
-  HTTP_TASK = 1;
-}
-
-message CommandTask {
-  string name = 1;
-  repeated string args = 2;
-  bytes input = 3;
-}
-
-message HttpTask {
-  string url = 1;
-  string method = 2;
-  map<string, string> headers = 3;
-  bytes body = 4;
-}
+import "callback.proto";
+import "task.proto";
 
 message AddTaskParams {
   string queue = 1;
-  TaskType type = 2;
-  bytes config = 3;
-  Callback callback = 4;
+  Task task = 2;
+  Callback callback = 3;
 }

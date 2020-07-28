@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+import "queue.proto";
+
+message ListQueueResult {
+  repeated Queue queues = 1;
+}

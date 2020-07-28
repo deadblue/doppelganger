@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+message Queue {
+  string name = 1;
+  int32 core_size = 2;
+
+}

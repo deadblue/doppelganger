@@ -25,412 +25,20 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type CallbackType int32
-
-const (
-	CallbackType_COMMAND_CB CallbackType = 0
-	CallbackType_HTTP_CB    CallbackType = 1
-)
-
-// Enum value maps for CallbackType.
-var (
-	CallbackType_name = map[int32]string{
-		0: "COMMAND_CB",
-		1: "HTTP_CB",
-	}
-	CallbackType_value = map[string]int32{
-		"COMMAND_CB": 0,
-		"HTTP_CB":    1,
-	}
-)
-
-func (x CallbackType) Enum() *CallbackType {
-	p := new(CallbackType)
-	*p = x
-	return p
-}
-
-func (x CallbackType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (CallbackType) Descriptor() protoreflect.EnumDescriptor {
-	return file_params_proto_enumTypes[0].Descriptor()
-}
-
-func (CallbackType) Type() protoreflect.EnumType {
-	return &file_params_proto_enumTypes[0]
-}
-
-func (x CallbackType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use CallbackType.Descriptor instead.
-func (CallbackType) EnumDescriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{0}
-}
-
-type TaskType int32
-
-const (
-	TaskType_COMMAND_TASK TaskType = 0
-	TaskType_HTTP_TASK    TaskType = 1
-)
-
-// Enum value maps for TaskType.
-var (
-	TaskType_name = map[int32]string{
-		0: "COMMAND_TASK",
-		1: "HTTP_TASK",
-	}
-	TaskType_value = map[string]int32{
-		"COMMAND_TASK": 0,
-		"HTTP_TASK":    1,
-	}
-)
-
-func (x TaskType) Enum() *TaskType {
-	p := new(TaskType)
-	*p = x
-	return p
-}
-
-func (x TaskType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (TaskType) Descriptor() protoreflect.EnumDescriptor {
-	return file_params_proto_enumTypes[1].Descriptor()
-}
-
-func (TaskType) Type() protoreflect.EnumType {
-	return &file_params_proto_enumTypes[1]
-}
-
-func (x TaskType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use TaskType.Descriptor instead.
-func (TaskType) EnumDescriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{1}
-}
-
-type CommandCallback struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Name string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Args []string `protobuf:"bytes,2,rep,name=args,proto3" json:"args,omitempty"`
-}
-
-func (x *CommandCallback) Reset() {
-	*x = CommandCallback{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CommandCallback) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CommandCallback) ProtoMessage() {}
-
-func (x *CommandCallback) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CommandCallback.ProtoReflect.Descriptor instead.
-func (*CommandCallback) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *CommandCallback) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *CommandCallback) GetArgs() []string {
-	if x != nil {
-		return x.Args
-	}
-	return nil
-}
-
-type HttpCallback struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Url     string            `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
-	Headers map[string]string `protobuf:"bytes,2,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-}
-
-func (x *HttpCallback) Reset() {
-	*x = HttpCallback{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *HttpCallback) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HttpCallback) ProtoMessage() {}
-
-func (x *HttpCallback) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HttpCallback.ProtoReflect.Descriptor instead.
-func (*HttpCallback) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *HttpCallback) GetUrl() string {
-	if x != nil {
-		return x.Url
-	}
-	return ""
-}
-
-func (x *HttpCallback) GetHeaders() map[string]string {
-	if x != nil {
-		return x.Headers
-	}
-	return nil
-}
-
-type Callback struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Type   CallbackType `protobuf:"varint,1,opt,name=type,proto3,enum=CallbackType" json:"type,omitempty"`
-	Config []byte       `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
-}
-
-func (x *Callback) Reset() {
-	*x = Callback{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Callback) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Callback) ProtoMessage() {}
-
-func (x *Callback) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Callback.ProtoReflect.Descriptor instead.
-func (*Callback) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *Callback) GetType() CallbackType {
-	if x != nil {
-		return x.Type
-	}
-	return CallbackType_COMMAND_CB
-}
-
-func (x *Callback) GetConfig() []byte {
-	if x != nil {
-		return x.Config
-	}
-	return nil
-}
-
-type CommandTask struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Name  string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Args  []string `protobuf:"bytes,2,rep,name=args,proto3" json:"args,omitempty"`
-	Input []byte   `protobuf:"bytes,3,opt,name=input,proto3" json:"input,omitempty"`
-}
-
-func (x *CommandTask) Reset() {
-	*x = CommandTask{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CommandTask) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CommandTask) ProtoMessage() {}
-
-func (x *CommandTask) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CommandTask.ProtoReflect.Descriptor instead.
-func (*CommandTask) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *CommandTask) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *CommandTask) GetArgs() []string {
-	if x != nil {
-		return x.Args
-	}
-	return nil
-}
-
-func (x *CommandTask) GetInput() []byte {
-	if x != nil {
-		return x.Input
-	}
-	return nil
-}
-
-type HttpTask struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Url     string            `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
-	Method  string            `protobuf:"bytes,2,opt,name=method,proto3" json:"method,omitempty"`
-	Headers map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Body    []byte            `protobuf:"bytes,4,opt,name=body,proto3" json:"body,omitempty"`
-}
-
-func (x *HttpTask) Reset() {
-	*x = HttpTask{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *HttpTask) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HttpTask) ProtoMessage() {}
-
-func (x *HttpTask) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HttpTask.ProtoReflect.Descriptor instead.
-func (*HttpTask) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *HttpTask) GetUrl() string {
-	if x != nil {
-		return x.Url
-	}
-	return ""
-}
-
-func (x *HttpTask) GetMethod() string {
-	if x != nil {
-		return x.Method
-	}
-	return ""
-}
-
-func (x *HttpTask) GetHeaders() map[string]string {
-	if x != nil {
-		return x.Headers
-	}
-	return nil
-}
-
-func (x *HttpTask) GetBody() []byte {
-	if x != nil {
-		return x.Body
-	}
-	return nil
-}
-
 type AddTaskParams struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	Queue    string    `protobuf:"bytes,1,opt,name=queue,proto3" json:"queue,omitempty"`
-	Type     TaskType  `protobuf:"varint,2,opt,name=type,proto3,enum=TaskType" json:"type,omitempty"`
-	Config   []byte    `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
-	Callback *Callback `protobuf:"bytes,4,opt,name=callback,proto3" json:"callback,omitempty"`
+	Task     *Task     `protobuf:"bytes,2,opt,name=task,proto3" json:"task,omitempty"`
+	Callback *Callback `protobuf:"bytes,3,opt,name=callback,proto3" json:"callback,omitempty"`
 }
 
 func (x *AddTaskParams) Reset() {
 	*x = AddTaskParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_params_proto_msgTypes[5]
+		mi := &file_params_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -443,7 +51,7 @@ func (x *AddTaskParams) String() string {
 func (*AddTaskParams) ProtoMessage() {}
 
 func (x *AddTaskParams) ProtoReflect() protoreflect.Message {
-	mi := &file_params_proto_msgTypes[5]
+	mi := &file_params_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -456,7 +64,7 @@ func (x *AddTaskParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddTaskParams.ProtoReflect.Descriptor instead.
 func (*AddTaskParams) Descriptor() ([]byte, []int) {
-	return file_params_proto_rawDescGZIP(), []int{5}
+	return file_params_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AddTaskParams) GetQueue() string {
@@ -466,16 +74,9 @@ func (x *AddTaskParams) GetQueue() string {
 	return ""
 }
 
-func (x *AddTaskParams) GetType() TaskType {
+func (x *AddTaskParams) GetTask() *Task {
 	if x != nil {
-		return x.Type
-	}
-	return TaskType_COMMAND_TASK
-}
-
-func (x *AddTaskParams) GetConfig() []byte {
-	if x != nil {
-		return x.Config
+		return x.Task
 	}
 	return nil
 }
@@ -490,56 +91,17 @@ func (x *AddTaskParams) GetCallback() *Callback {
 var File_params_proto protoreflect.FileDescriptor
 
 var file_params_proto_rawDesc = []byte{
-	0x0a, 0x0c, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x39,
-	0x0a, 0x0f, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63,
-	0x6b, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x72, 0x67, 0x73, 0x18, 0x02, 0x20,
-	0x03, 0x28, 0x09, 0x52, 0x04, 0x61, 0x72, 0x67, 0x73, 0x22, 0x92, 0x01, 0x0a, 0x0c, 0x48, 0x74,
-	0x74, 0x70, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x72,
-	0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12, 0x34, 0x0a, 0x07,
-	0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
-	0x48, 0x74, 0x74, 0x70, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x2e, 0x48, 0x65, 0x61,
-	0x64, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x07, 0x68, 0x65, 0x61, 0x64, 0x65,
-	0x72, 0x73, 0x1a, 0x3a, 0x0a, 0x0c, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74,
-	0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x45,
-	0x0a, 0x08, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x12, 0x21, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0d, 0x2e, 0x43, 0x61, 0x6c, 0x6c, 0x62,
-	0x61, 0x63, 0x6b, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a,
-	0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x63,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x4b, 0x0a, 0x0b, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64,
-	0x54, 0x61, 0x73, 0x6b, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x72, 0x67, 0x73,
-	0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x04, 0x61, 0x72, 0x67, 0x73, 0x12, 0x14, 0x0a, 0x05,
-	0x69, 0x6e, 0x70, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x05, 0x69, 0x6e, 0x70,
-	0x75, 0x74, 0x22, 0xb6, 0x01, 0x0a, 0x08, 0x48, 0x74, 0x74, 0x70, 0x54, 0x61, 0x73, 0x6b, 0x12,
-	0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72,
-	0x6c, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64, 0x12, 0x30, 0x0a, 0x07, 0x68, 0x65, 0x61,
-	0x64, 0x65, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x48, 0x74, 0x74,
-	0x70, 0x54, 0x61, 0x73, 0x6b, 0x2e, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74,
-	0x72, 0x79, 0x52, 0x07, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x62,
-	0x6f, 0x64, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x62, 0x6f, 0x64, 0x79, 0x1a,
-	0x3a, 0x0a, 0x0c, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x83, 0x01, 0x0a, 0x0d,
-	0x41, 0x64, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x14, 0x0a,
-	0x05, 0x71, 0x75, 0x65, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x71, 0x75,
-	0x65, 0x75, 0x65, 0x12, 0x1d, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0e, 0x32, 0x09, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x0c, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x25, 0x0a, 0x08, 0x63, 0x61,
-	0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x43,
-	0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x52, 0x08, 0x63, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63,
-	0x6b, 0x2a, 0x2b, 0x0a, 0x0c, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x54, 0x79, 0x70,
-	0x65, 0x12, 0x0e, 0x0a, 0x0a, 0x43, 0x4f, 0x4d, 0x4d, 0x41, 0x4e, 0x44, 0x5f, 0x43, 0x42, 0x10,
-	0x00, 0x12, 0x0b, 0x0a, 0x07, 0x48, 0x54, 0x54, 0x50, 0x5f, 0x43, 0x42, 0x10, 0x01, 0x2a, 0x2b,
-	0x0a, 0x08, 0x54, 0x61, 0x73, 0x6b, 0x54, 0x79, 0x70, 0x65, 0x12, 0x10, 0x0a, 0x0c, 0x43, 0x4f,
-	0x4d, 0x4d, 0x41, 0x4e, 0x44, 0x5f, 0x54, 0x41, 0x53, 0x4b, 0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09,
-	0x48, 0x54, 0x54, 0x50, 0x5f, 0x54, 0x41, 0x53, 0x4b, 0x10, 0x01, 0x42, 0x06, 0x5a, 0x04, 0x2e,
-	0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x0a, 0x0c, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x0e,
+	0x63, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x0a,
+	0x74, 0x61, 0x73, 0x6b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x67, 0x0a, 0x0d, 0x41, 0x64,
+	0x64, 0x54, 0x61, 0x73, 0x6b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x71,
+	0x75, 0x65, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x71, 0x75, 0x65, 0x75,
+	0x65, 0x12, 0x19, 0x0a, 0x04, 0x74, 0x61, 0x73, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x05, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x04, 0x74, 0x61, 0x73, 0x6b, 0x12, 0x25, 0x0a, 0x08,
+	0x63, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09,
+	0x2e, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0x52, 0x08, 0x63, 0x61, 0x6c, 0x6c, 0x62,
+	0x61, 0x63, 0x6b, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -554,31 +116,20 @@ func file_params_proto_rawDescGZIP() []byte {
 	return file_params_proto_rawDescData
 }
 
-var file_params_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_params_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_params_proto_goTypes = []interface{}{
-	(CallbackType)(0),       // 0: CallbackType
-	(TaskType)(0),           // 1: TaskType
-	(*CommandCallback)(nil), // 2: CommandCallback
-	(*HttpCallback)(nil),    // 3: HttpCallback
-	(*Callback)(nil),        // 4: Callback
-	(*CommandTask)(nil),     // 5: CommandTask
-	(*HttpTask)(nil),        // 6: HttpTask
-	(*AddTaskParams)(nil),   // 7: AddTaskParams
-	nil,                     // 8: HttpCallback.HeadersEntry
-	nil,                     // 9: HttpTask.HeadersEntry
+	(*AddTaskParams)(nil), // 0: AddTaskParams
+	(*Task)(nil),          // 1: Task
+	(*Callback)(nil),      // 2: Callback
 }
 var file_params_proto_depIdxs = []int32{
-	8, // 0: HttpCallback.headers:type_name -> HttpCallback.HeadersEntry
-	0, // 1: Callback.type:type_name -> CallbackType
-	9, // 2: HttpTask.headers:type_name -> HttpTask.HeadersEntry
-	1, // 3: AddTaskParams.type:type_name -> TaskType
-	4, // 4: AddTaskParams.callback:type_name -> Callback
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	1, // 0: AddTaskParams.task:type_name -> Task
+	2, // 1: AddTaskParams.callback:type_name -> Callback
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_params_proto_init() }
@@ -586,68 +137,10 @@ func file_params_proto_init() {
 	if File_params_proto != nil {
 		return
 	}
+	file_callback_proto_init()
+	file_task_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_params_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommandCallback); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_params_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpCallback); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_params_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Callback); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_params_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommandTask); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_params_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpTask); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_params_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AddTaskParams); i {
 			case 0:
 				return &v.state
@@ -665,14 +158,13 @@ func file_params_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_params_proto_rawDesc,
-			NumEnums:      2,
-			NumMessages:   8,
+			NumEnums:      0,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_params_proto_goTypes,
 		DependencyIndexes: file_params_proto_depIdxs,
-		EnumInfos:         file_params_proto_enumTypes,
 		MessageInfos:      file_params_proto_msgTypes,
 	}.Build()
 	File_params_proto = out.File
