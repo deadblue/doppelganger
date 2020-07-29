@@ -31,11 +31,11 @@ type Conf struct {
 	Server       *ServerConf       `yaml:"server"`
 }
 
-func LoadConf(path string, conf *Conf) (err error) {
+func (c *Conf) Load(path string) (err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return
 	}
 	defer quietly.Close(file)
-	return yaml.NewDecoder(file).Decode(conf)
+	return yaml.NewDecoder(file).Decode(c)
 }
