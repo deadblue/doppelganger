@@ -3,8 +3,9 @@ package engine
 import "errors"
 
 var (
-	// When caller submit task with a non-exists queue.
-	errUnknownQueue = errors.New("unknown queue")
-	// When caller submit task to a closed queue executor.
+	errQueueNotExist = errors.New("queue not exist")
+
+	errQueueExist = errors.New("queue already exist")
+
 	errExecutorClosed = errors.New("task exector has been closed")
 )
