@@ -1,6 +1,7 @@
 package callback
 
 import (
+	"github.com/deadblue/doppelganger/internal/pkg/engine"
 	"github.com/deadblue/gostream/quietly"
 	"log"
 	"os"
@@ -19,4 +20,8 @@ func (c FileCallback) Send(result []byte) {
 	if err != nil {
 		log.Printf("Write file error: %s", err)
 	}
+}
+
+func File(path string) engine.Callback {
+	return FileCallback(path)
 }
