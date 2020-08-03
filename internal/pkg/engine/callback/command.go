@@ -1,9 +1,9 @@
 package callback
 
 import (
-	"bytes"
 	"github.com/deadblue/doppelganger/internal/pkg/engine"
-	"log"
+	"io"
+	"io/ioutil"
 	"os/exec"
 )
 
@@ -12,18 +12,16 @@ type CommandCallback struct {
 	args []string
 }
 
-func (c *CommandCallback) Send(result []byte) {
-	cmd := exec.Command(c.name, c.args...)
-	cmd.Stdin = bytes.NewReader(result)
-	if err := cmd.Run(); err != nil {
-		log.Printf("Send result to callback error: %s", err)
-	}
+func (cc *CommandCallback) Send(r io.Reader) error {
+	cmd := exec.Command(cc.name, cc.args...)
+	cmd.Stdin = r
+	cmd.Stdout, cmd.Stderr = ioutil.Discard, ioutil.Discard
+	return cmd.Run()
 }
 
-// Command creates a command based callback.
-func Command(name string, args []string) engine.Callback {
+func Command(name string, args ...string) engine.Callback {
 	return &CommandCallback{
 		name: name,
-		args: args,
+		args: append([]string{}, args...),
 	}
 }

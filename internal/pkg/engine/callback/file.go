@@ -3,23 +3,20 @@ package callback
 import (
 	"github.com/deadblue/doppelganger/internal/pkg/engine"
 	"github.com/deadblue/gostream/quietly"
-	"log"
+	"io"
 	"os"
 )
 
 type FileCallback string
 
-func (c FileCallback) Send(result []byte) {
-	file, err := os.OpenFile(string(c), os.O_WRONLY|os.O_CREATE, 0644)
+func (fc FileCallback) Send(r io.Reader) (err error) {
+	file, err := os.OpenFile(string(fc), os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Printf("Create file error: %s", err)
 		return
 	}
 	defer quietly.Close(file)
-	_, err = file.Write(result)
-	if err != nil {
-		log.Printf("Write file error: %s", err)
-	}
+	_, err = io.Copy(file, r)
+	return
 }
 
 func File(path string) engine.Callback {

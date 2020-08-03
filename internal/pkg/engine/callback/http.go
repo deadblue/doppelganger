@@ -1,48 +1,50 @@
 package callback
 
 import (
-	"bytes"
 	"github.com/deadblue/gostream/quietly"
+	"io"
 	"log"
 	"net/http"
 )
 
 type HttpCallback struct {
-	url     string
-	headers map[string]string
+	// Callback URL
+	url string
+	// Callback HTTP headers
+	hdrs map[string]string
 }
 
-func (c *HttpCallback) Send(result []byte) {
+func (hc *HttpCallback) Send(r io.Reader) (err error) {
 	// Make request
-	req, err := http.NewRequest(http.MethodPost, c.url, bytes.NewReader(result))
+	req, err := http.NewRequest(http.MethodPost, hc.url, r)
 	if err != nil {
-		log.Printf("Create callback request failed: %s", err)
 		return
 	}
 	req.Header.Set("User-Agent", "Doppelganger/1.0")
-	if c.headers != nil {
-		for name, value := range c.headers {
+	if hc.hdrs != nil {
+		for name, value := range hc.hdrs {
 			req.Header.Set(name, value)
 		}
 	}
 	// Send request
-	if resp, err := http.DefaultClient.Do(req); err != nil {
-		log.Printf("Send callback request error: %s", err)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Printf("HTTP callback error: %s", err)
 	} else {
 		defer quietly.Close(resp.Body)
-		log.Printf("Callback request status code: %d", resp.StatusCode)
+		log.Printf("HTTP callback status code: %d", resp.StatusCode)
 	}
+	return
 }
 
-func (c *HttpCallback) Header(name, value string) *HttpCallback {
-	c.headers[name] = value
-	return c
+func (hc *HttpCallback) Header(name, value string) *HttpCallback {
+	hc.hdrs[name] = value
+	return hc
 }
 
-// Http creates a HTTP request based callback.
 func Http(url string) *HttpCallback {
 	return &HttpCallback{
-		url:     url,
-		headers: map[string]string{},
+		url:  url,
+		hdrs: make(map[string]string),
 	}
 }

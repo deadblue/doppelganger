@@ -7,5 +7,5 @@ var (
 
 	errQueueExist = errors.New("queue already exist")
 
-	errExecutorClosed = errors.New("task exector has been closed")
+	errExecutorClosed = errors.New("task executor has been closed")
 )

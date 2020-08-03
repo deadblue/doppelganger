@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"github.com/deadblue/doppelganger/internal/pkg/engine"
+	"io"
 	"io/ioutil"
 	"os/exec"
 )
@@ -11,13 +13,12 @@ import (
 var errNoCommand = errors.New("no command to execute")
 
 type CommandTask struct {
-	baseTask
 	name  string
 	args  []string
 	input []byte
 }
 
-func (t *CommandTask) Run(ctx context.Context) (err error) {
+func (t *CommandTask) Run(ctx context.Context, cb engine.Callback) (err error) {
 	if t.name == "" {
 		return errNoCommand
 	}
@@ -28,21 +29,24 @@ func (t *CommandTask) Run(ctx context.Context) (err error) {
 		cmd.Stdin = bytes.NewReader(t.input)
 	}
 	// Capture stdout when need
-	stdout := (*bytes.Buffer)(nil)
-	if t.cb != nil {
-		stdout = &bytes.Buffer{}
-		cmd.Stdout = stdout
+	if cb != nil {
+		cmd.Stdout = &bytes.Buffer{}
 	} else {
 		cmd.Stdout = ioutil.Discard
 	}
 	cmd.Stderr = ioutil.Discard
 	// Execute command
 	if err = cmd.Run(); err == nil {
-		if t.cb != nil && stdout != nil {
-			go t.cb.Send(stdout.Bytes())
+		// Send result to callback
+		if cb != nil {
+			if stdout, ok := cmd.Stdout.(io.Reader); ok {
+				err = cb.Send(stdout)
+			} else {
+				// What the hell!?
+			}
 		}
 	}
-	return nil
+	return
 }
 
 func (t *CommandTask) Input(data []byte) *CommandTask {
@@ -51,13 +55,11 @@ func (t *CommandTask) Input(data []byte) *CommandTask {
 	return t
 }
 
-// Command create a command based task.
-func Command(name string, args []string) *CommandTask {
-	if args == nil {
-		args = []string{}
-	}
-	return &CommandTask{
+// Command creates a command based task.
+func Command(name string, args ...string) *CommandTask {
+	ct := &CommandTask{
 		name: name,
-		args: args,
+		args: append([]string{}, args...),
 	}
+	return ct
 }

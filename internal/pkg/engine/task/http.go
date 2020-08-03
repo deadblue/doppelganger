@@ -3,21 +3,20 @@ package task
 import (
 	"bytes"
 	"context"
+	"github.com/deadblue/doppelganger/internal/pkg/engine"
 	"github.com/deadblue/gostream/quietly"
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
 type HttpTask struct {
-	baseTask
 	url     string
 	method  string
 	headers map[string]string
 	body    []byte
 }
 
-func (t *HttpTask) Run(ctx context.Context) (err error) {
+func (t *HttpTask) Run(ctx context.Context, cb engine.Callback) (err error) {
 	// Make request
 	if t.method == "" {
 		if t.body == nil {
@@ -43,18 +42,13 @@ func (t *HttpTask) Run(ctx context.Context) (err error) {
 	}
 	// Send request
 	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return
+	if err == nil {
+		defer quietly.Close(resp.Body)
+		if cb != nil {
+			err = cb.Send(resp.Body)
+		}
 	}
-	defer quietly.Close(resp.Body)
-	// Read response and send to callback
-	if t.cb != nil {
-		result, _ := ioutil.ReadAll(resp.Body)
-		go t.cb.Send(result)
-	} else {
-		_, _ = io.Copy(ioutil.Discard, resp.Body)
-	}
-	return nil
+	return
 }
 
 func (t *HttpTask) Header(name, value string) *HttpTask {

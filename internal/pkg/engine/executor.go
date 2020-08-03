@@ -32,17 +32,17 @@ type _Executor struct {
 	// Completed task count
 	complete int
 	// Total time for task
-	duration time.Duration
+	duration int64
 }
 
-// Submit add a task to executor's task queue.
-func (e *_Executor) Submit(task Task, cb Callback) error {
+// Submit add a task into to executor's queue.
+func (e *_Executor) Submit(task Task, callback Callback) error {
 	if e.cf != 0 {
 		return errExecutorClosed
 	}
 	e.jq.PushBack(_Job{
 		t:  task,
-		cb: cb,
+		cb: callback,
 	})
 	newSize := atomic.AddInt32(&e.js, 1)
 	if newSize == 1 {
@@ -54,8 +54,8 @@ func (e *_Executor) Submit(task Task, cb Callback) error {
 /*
 Shutdown notifies executor to close.
 
-After that, caller can not submit new task to this executor, but all running and
-waiting tasks will be run.
+After that, caller can not submit new task to this executor, but all tasks
+in queue will be done.
 */
 func (e *_Executor) Shutdown() {
 	// Close only once
@@ -66,7 +66,7 @@ func (e *_Executor) Shutdown() {
 }
 
 // start goroutines for producer and consumers.
-func (e *_Executor) start(n int) *_Executor {
+func (e *_Executor) startup(n int) *_Executor {
 	// Start consumers
 	for i := 0; i < n; i++ {
 		go e.consumer()
@@ -98,7 +98,7 @@ func (e *_Executor) producer() {
 			}
 		}
 	}
-	// No more task, close channel.
+	// No more task, close job channel.
 	close(e.jch)
 }
 
@@ -108,14 +108,25 @@ func (e *_Executor) consumer() {
 	defer e.wg.Done()
 
 	for job := range e.jch {
-		// TODO: Retry and send result to callback.
-		err := job.t.Run(context.Background())
-		if err != nil {
-			log.Printf("Run task error: %s", err)
-		} else {
-			e.complete += 1
+		if err := e.doJob(&job); err != nil {
+			log.Printf("Run job error: %s", err)
 		}
 	}
+}
+
+func (e *_Executor) doJob(job *_Job) (err error) {
+	// TODO: how to retry?
+	startTime := time.Now()
+	err = job.t.Run(context.Background(), job.cb)
+	runningTime := time.Now().Sub(startTime)
+	if err != nil {
+		log.Printf("Run task error: %s", err)
+	} else {
+		// Update statistics
+		e.complete += 1
+		atomic.AddInt64(&e.duration, int64(runningTime))
+	}
+	return
 }
 
 // newExecutor creates an queue executor.
@@ -132,5 +143,5 @@ func newExecutor(wg *sync.WaitGroup, opts *QueueOpts) *_Executor {
 		js:  0,
 		eb:  make(chan struct{}, 1),
 		jch: make(chan _Job, opts.CoreSize),
-	}).start(opts.CoreSize)
+	}).startup(opts.CoreSize)
 }

@@ -24,6 +24,7 @@ func (e *Engine) startUp() {
 	close(e.done)
 }
 
+// QueueAdd creates a queue in engine with specified name and opts.
 func (e *Engine) QueueAdd(name string, opts *QueueOpts) (err error) {
 	e.qm.Lock()
 	defer e.qm.Unlock()
@@ -37,19 +38,22 @@ func (e *Engine) QueueAdd(name string, opts *QueueOpts) (err error) {
 }
 
 func (e *Engine) QueueList() {
+	// TODO
 	return
 }
 
-func (e *Engine) JobAdd(queue string, task Task, cb Callback) (err error) {
+// JobAdd adds a task to queue.
+// When the task done, its result will be sent.
+func (e *Engine) JobAdd(queue string, task Task, callback Callback) (err error) {
 	if ex, ok := e.es[queue]; ok {
-		err = ex.Submit(task, cb)
-		// TODO
+		err = ex.Submit(task, callback)
 	} else {
 		err = errQueueNotExist
 	}
 	return
 }
 
+// Shutdown notify all executors to shutdown.
 func (e *Engine) Shutdown() {
 	for n, qe := range e.es {
 		log.Printf("Shutting down queue [%s]", n)
