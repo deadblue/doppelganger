@@ -16,7 +16,7 @@ func (s *Server) startup(l net.Listener) {
 }
 
 func (s *Server) shutdown() {
-	if atomic.LoadInt32(&s.closed) == 0 {
+	if atomic.LoadInt32(&s.cf) == 0 {
 		err := s.hs.Shutdown(context.Background())
 		s.close(err)
 	}
@@ -24,7 +24,7 @@ func (s *Server) shutdown() {
 
 func (s *Server) close(err error) {
 	// Close only once
-	if atomic.CompareAndSwapInt32(&s.closed, 0, 1) {
+	if atomic.CompareAndSwapInt32(&s.cf, 0, 1) {
 		if err != nil {
 			s.errCh <- err
 		}

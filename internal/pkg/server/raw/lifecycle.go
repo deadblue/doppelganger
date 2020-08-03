@@ -16,7 +16,7 @@ func (s *Server) startup() {
 	for alive := true; alive; {
 		conn, err := s.l.Accept()
 		if err != nil {
-			if atomic.LoadInt32(&s.closing) == 1 {
+			if atomic.LoadInt32(&s.cf) == 1 {
 				alive = false
 			} else {
 				log.Printf("Unexpected accept error: %s", err)
@@ -34,7 +34,7 @@ func (s *Server) serve(conn net.Conn) {
 		s.wg.Done()
 	}()
 	// Read message one by one
-	for atomic.LoadInt32(&s.closing) != 1 {
+	for atomic.LoadInt32(&s.cf) != 1 {
 		req := &pb.Request{}
 		if err := protocol.ReadMessage(conn, req); err != nil {
 			if err != io.EOF {

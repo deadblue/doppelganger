@@ -10,7 +10,7 @@ type Server struct {
 	// http server
 	hs *http.Server
 	// close flag
-	closed int32
+	cf int32
 	// error channel
 	errCh chan error
 }
@@ -28,8 +28,8 @@ func New(e *engine.Engine, l net.Listener) *Server {
 		hs: &http.Server{
 			Handler: &handler{e: e},
 		},
-		closed: 0,
-		errCh:  make(chan error),
+		cf:    0,
+		errCh: make(chan error),
 	}
 	go s.startup(l)
 	return s

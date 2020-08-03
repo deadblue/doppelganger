@@ -15,7 +15,7 @@ type Server struct {
 	l net.Listener
 
 	// closing flag
-	closing int32
+	cf int32
 	// wait group for all connections closed
 	wg sync.WaitGroup
 	// channel to notify server has completely shutdown.
@@ -23,7 +23,7 @@ type Server struct {
 }
 
 func (s *Server) Shutdown() {
-	if atomic.CompareAndSwapInt32(&s.closing, 0, 1) {
+	if atomic.CompareAndSwapInt32(&s.cf, 0, 1) {
 		go s.shutdown()
 	} else {
 		log.Println("Server is being / has been shutdown!")
@@ -36,12 +36,12 @@ func (s *Server) Done() <-chan struct{} {
 
 func New(e *engine.Engine, l net.Listener) *Server {
 	s := &Server{
-		// engine
+		// task engine
 		e: e,
 		// network listener
 		l: l,
 		// closing flag
-		closing: 0,
+		cf: 0,
 		// wait for all active connections exit.
 		wg: sync.WaitGroup{},
 		// notification channel

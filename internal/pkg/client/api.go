@@ -15,7 +15,7 @@ func (c *Client) AddCommandTask(queue string, cmdName string, cmdArgs ...string)
 	if err != nil {
 		return
 	}
-	return c.call(message.MethodAddTask, &pb.AddTaskParams{
+	return c.call(message.MethodTaskAdd, &pb.AddTaskParams{
 		Queue: queue,
 		Task: &pb.Task{
 			Type:   pb.TaskType_TASK_COMMAND,
@@ -32,7 +32,7 @@ func (c *Client) AddHttpTask(queue string, url string) (err error) {
 	if err != nil {
 		return
 	}
-	return c.call(message.MethodAddTask, &pb.AddTaskParams{
+	return c.call(message.MethodTaskAdd, &pb.AddTaskParams{
 		Queue: queue,
 		Task: &pb.Task{
 			Type:   pb.TaskType_TASK_HTTP,

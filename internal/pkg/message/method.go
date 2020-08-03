@@ -1,6 +1,8 @@
 package message
 
 const (
-	MethodAddTask   = "AddTask"
-	MethodListQueue = "ListQueue"
+	MethodTaskAdd = "TaskAdd"
+
+	MethodQueueAdd  = "QueueAdd"
+	MethodQueueList = "QueueList"
 )
